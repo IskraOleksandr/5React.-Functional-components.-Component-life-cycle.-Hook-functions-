@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react';
+import styles from './style.module.css';
 
 function TimerApp() {
     const [inputSeconds, setInputSeconds] = useState(5);
     const [seconds, setSeconds] = useState('');
     const [isRunning, setIsRunning] = useState(false);
 
-    const handleInputChange = (e) => {
-        setInputSeconds(parseInt(e.target.value));
-    };
     const handleStart = () => {
         const newTime = parseInt(inputSeconds, 10);
         if (!isNaN(newTime) && newTime > 0) {
@@ -20,10 +18,11 @@ function TimerApp() {
     const handlePause = () => {
         setIsRunning(!isRunning);
     };
-    const stopTimer = () => {
+    const handleReset = () => {
         setIsRunning(false);
-        setInputSeconds('');
-        setSeconds(Number(seconds) || 5);
+        setSeconds(0);
+        setInputSeconds(0);
+
     };
 
     function formatTime(seconds) {
@@ -53,15 +52,15 @@ function TimerApp() {
     }, [isRunning]);
 
     return (
-        <div class="maincontainer">
-            <h3 class="time my_h3">Таймер</h3>
-            <h3 class="time">{formatTime(seconds)}</h3>
+        <div className={styles.maincontainer}>
+            <h3 className={styles.time + " " + styles.my_h3}>Таймер</h3>
+            <h3 className={styles.time}>{formatTime(seconds)}</h3>
             <div>
-                <button class="bt1" onClick={handleStart} disabled={isRunning}>Старт</button>
-                <button class="bt1" onClick={handlePause} disabled={seconds === 0}> {isRunning ? "Пауза" : "Возобновить"} </button>
-                <button class="bt1" onClick={stopTimer} disabled={isRunning}>Сбросить</button>
+                <button className={String(!isRunning && styles.bt1) + " " + String(isRunning && (styles.disabled + " "+ styles.bt2))} onClick={handleStart} disabled={isRunning}>Старт</button>
+                <button className={styles.bt1} onClick={handlePause} disabled={seconds === 0 || !isRunning}> {isRunning ? "Пауза" : "Возобновить"} </button>
+                <button className={styles.bt1} onClick={handleReset}>Сбросить</button>
             </div>
-            <div class="inputcontainer">
+            <div className={styles.inputcontainer}>
                 <input type="number" value={inputSeconds}
                        onChange={(e) => setInputSeconds(e.target.value)}/>
             </div>
